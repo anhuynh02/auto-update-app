@@ -1,67 +1,35 @@
-const { app,BrowserWindow , ipcMain, autoUpdater, dialog } = require('electron')
-const path = require("path")
-const server = 'https://auto-update-app-agxu.vercel.app'
-const url = `${server}/update/${process.platform}/${app.getVersion()}`
+const { app, autoUpdater, dialog } = require('electron');
 
+// Specify the URL of the update server
+const server = 'https://update.electronjs.org/your-username/your-repo';
+const url = `${server}/update/${process.platform}/${app.getVersion()}`;
 
-function createWindow() {
-  const mainWindow = new BrowserWindow({
-    webPreferences: {
+// Set the update feed URL
+autoUpdater.setFeedURL({ url });
 
-      preload: path.join(__dirname, 'preload.js')
-    }
-  })
+// Check for updates every 10 minutes
+setInterval(() => {
+  autoUpdater.checkForUpdates();
+}, 600000);
 
-  ipcMain.on('set-title', (event, title) => {
-    const webContents = event.sender
-    const win = BrowserWindow.fromWebContents(webContents)
-    win.setTitle(title)
-  })
+// Handle update-downloaded event
+autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+  const dialogOpts = {
+    type: 'info',
+    buttons: ['Restart', 'Later'],
+    title: 'Application Update',
+    message: process.platform === 'win32' ? releaseNotes : releaseName,
+    detail:
+      'A new version has been downloaded. Restart the application to apply the updates.'
+  };
 
-  mainWindow.loadFile('index.html')
-}
-
-// Set up auto-updater
-app.whenReady().then(() => {
-  createWindow();
-  console.log(app.app.getVersion())
-  // Set the feed URL for auto-updater
-  autoUpdater.setFeedURL(url);
-
-  // Check for updates every 10 seconds
-  setInterval(() => {
-    autoUpdater.checkForUpdates();
-  }, 10000);
-
-  // Event: Update downloaded
-  autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
-    // Display a dialog to prompt the user to restart and apply updates
-    const dialogOpts = {
-      type: 'info',
-      buttons: ['Restart', 'Later'],
-      title: 'Application Update',
-      message: process.platform === 'win32' ? releaseNotes : releaseName,
-      detail: 'A new version has been downloaded. Restart the application to apply the updates.'
-    };
-
-    dialog.showMessageBox(dialogOpts).then((returnValue) => {
-      if (returnValue.response === 0) autoUpdater.quitAndInstall();
-    });
-  });
-
-  // Event: Error in auto-updater
-  autoUpdater.on('error', (error) => {
-    console.error('Error updating the application:', error);
-  });
-
-  // Handle window activation
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  dialog.showMessageBox(dialogOpts).then((returnValue) => {
+    if (returnValue.response === 0) autoUpdater.quitAndInstall();
   });
 });
 
-// Handle window closure
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit();
+// Handle error event
+autoUpdater.on('error', (message) => {
+  console.error('There was a problem updating the application');
+  console.error(message);
 });
-

@@ -1,9 +1,11 @@
-document.addEventListener("DOMContentLoaded", function () {
-  window.bridge.updateMessage(updateMessage);
-});
+/**
+ * This file is loaded via the <script> tag in the index.html file and will
+ * be executed in the renderer process for that window. No Node.js APIs are
+ * available in this process because `nodeIntegration` is turned off and
+ * `contextIsolation` is turned on. Use the contextBridge API in `preload.js`
+ * to expose Node.js functionality from the main process.
+ */
+const { ipcRenderer } = require('electron');
 
-function updateMessage(event, message) {
-  console.log("message logged in view");
-  let messageCtn = document.getElementById("message");
-  messageCtn.innerHTML = message;
-}
+ipcRenderer.on('updateMessage', (event, message) => {
+  console.log('Received update message in renderer process:', message);
