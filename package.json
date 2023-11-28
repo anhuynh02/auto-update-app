@@ -1,0 +1,16 @@
+{
+  "name": "bumpy-train-analyze-6nd05",
+  "productName": "bumpy-train-analyze-6nd05",
+  "description": "My Electron application description",
+  "keywords": [],
+  "main": "./main.js",
+  "version": "1.0.0",
+  "author": "anhuy",
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "27.1.2"
+  }
+}
