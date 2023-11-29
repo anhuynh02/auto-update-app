@@ -1,16 +1,35 @@
 {
-  "name": "gamy-advertising-love-5r7nj",
-  "productName": "gamy-advertising-love-5r7nj",
-  "description": "My Electron application description",
-  "keywords": [],
-  "main": "./main.js",
-  "version": "1.0.0",
-  "author": "anhuy",
+  "name": "my-electron-app",
+  "version": "1.0.1",
+  "description": "Test ",
+  "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
-  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anhuynh02/auto-update-app.git"
+  },
+  "author": "Thong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anhuynh02/auto-update-app/issues"
+  },
+  "homepage": "https://github.com/anhuynh02/auto-update-app#readme",
   "devDependencies": {
-    "electron": "27.1.2"
+    "@electron-forge/cli": "^7.1.0",
+    "@electron-forge/maker-deb": "^7.1.0",
+    "@electron-forge/maker-rpm": "^7.1.0",
+    "@electron-forge/maker-squirrel": "^7.1.0",
+    "@electron-forge/maker-zip": "^7.1.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.1.0",
+    "electron": "^27.1.2"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "update-electron-app": "^3.0.0"
   }
 }
